@@ -3,7 +3,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.stackroute</groupId>
-	<artifactId>Newz</artifactId>
+	<artifactId>NewzStep2</artifactId>
 	<packaging>war</packaging>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>NewzApp Maven Webapp</name>
@@ -11,8 +11,8 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<maven.compiler.source>11</maven.compiler.source>
-		<maven.compiler.target>11</maven.compiler.target>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
 		<org.aspectj-version>1.6.10</org.aspectj-version>
 		<org.springframework-version>5.0.4.RELEASE</org.springframework-version>
 		<org.slf4j-version>1.6.6</org.slf4j-version>
@@ -139,7 +139,7 @@
 
 
 	<build>
-		<finalName>Newz</finalName>
+		<finalName>NewzStep2</finalName>
 		<pluginManagement><!-- lock down plugins versions to avoid using Maven 
 				defaults (may be moved to parent pom) -->
 			<plugins>

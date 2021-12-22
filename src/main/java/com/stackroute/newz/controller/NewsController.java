@@ -1,64 +1,90 @@
 package com.stackroute.newz.controller;
 
-/*
- * Annotate the class with @Controller annotation. @Controller annotation is used to mark 
- * any POJO class as a controller so that Spring can recognize this class as a Controller
- */
+import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import com.stackroute.newz.dao.NewsDAO;
+import com.stackroute.newz.model.News;
+
+@Controller
+@ComponentScan("com.stackroute.newz.dao")
 public class NewsController {
-	
-	/*
-	 * From the problem statement, we can understand that the application requires
-	 * us to implement the following functionalities.
-	 * 
-	 * 1. display the list of existing news from the persistence data. Each news element
-	 * should contain News Name, News Author, description, content and published date. 
-	 * 2. Add a new news which should contain the News Name, News Author, description, content and 
-	 * published date. 
-	 * 3. Delete an existing news 
-	 * 4. Update an existing news
-	 * 
-	 */
 
-	/*
-	 * Autowiring should be implemented for the NewsDAO.
-	 * Create a News object.
-	 * 
-	 */
-	
-	
-	
-	/*
-	 * Define a handler method to read the existing news from the database and add
-	 * it to the ModelMap which is an implementation of Map, used when building
-	 * model data for use with views. it should map to the default URL i.e. "/"
-	 */
-	
+	private static final String INDEX_PAGE = "index";
 
-	/*
-	 * Define a handler method which will read the News Name, News Author, description, 
-	 * content from request parameters and save the news in news table in
-	 * database. Please note that the publishedAt should always be auto populated with
-	 * system time and should not be accepted from the user. Also, after saving the
-	 * news, it should show the same along with existing news items. Hence, this handler
-	 * method should redirect to the default URL i.e. "/".
-	 */
-	
+	@Autowired
+	@Qualifier("newsDaoImpl")
+	private NewsDAO newsDAO;
 
-	/*
-	 * Define a handler method which will read the newsId from request parameters
-	 * and remove an existing news by calling the deleteNews() method of the
-	 * NewsRepository class.This handler method should map to the URL "/delete". Post 
-	 * deletion, the handler method should be redirected to the default URL i.e. "/"
-	 */
-	
+	@RequestMapping(value = "/")
+	public String getNewsList(ModelMap model) {
 
-	
-	/*
-	 * Define a handler method which will update the existing news. This handler
-	 * method should map to the URL "/update".
-	 */
-	
+		List<News> newsList = getAllNews();
+		model.addAttribute("news", new News());
+		model.addAttribute("isUpdate", false);
+		model.addAttribute("news", newsList);
+		return INDEX_PAGE;
+	}
 
+	@RequestMapping(value = "/add"  , method = RequestMethod.POST )
+	public String saveNews(@ModelAttribute("news") News newsObj, ModelMap modelMap) {
+		System.out.println("HIiiiiiiiiiiiiiiiiiiii");
+		if (newsObj.getNewsId() != null) {
+			News newsObjFromDb = newsDAO.getNewsById(newsObj.getNewsId());
+			if (newsObjFromDb != null)
+				newsObj.setPublishedAt(newsObjFromDb.getPublishedAt());
+			boolean isUpdated = newsDAO.updateNews(newsObj);
+			if (newsObj.getAuthor().equals("") && newsObj.getName().equals(""))
+				isUpdated = false;
+			List<News> newsList = getAllNews();
+			modelMap.addAttribute("news", newsList);
+			if (!isUpdated)
+				return INDEX_PAGE;
+		} else {
+			boolean isAdded = newsDAO.addNews(newsObj);
+			List<News> newsLst = getAllNews();
+			modelMap.addAttribute("news", newsLst);
+			if (!isAdded)
+				return INDEX_PAGE;
+		}
+
+		return "redirect:/";
+	}
+
+	@RequestMapping(value = "/delete")
+	public String deleteNews(ModelMap map, @RequestParam("newsId") int newsId) {
+		if (!newsDAO.deleteNews(newsId)) {
+			return INDEX_PAGE;
+		}
+		List<News> newsLst = getAllNews();
+		map.addAttribute("news", newsLst);
+
+		return "redirect:/";
+	}
+
+	@RequestMapping(value = "/update")
+	public String updateNews(ModelMap map, @RequestParam("newsId") int newsId) {
+
+		News currentNews = newsDAO.getNewsById(newsId);
+		boolean isUpdated = newsDAO.updateNews(currentNews);
+		List<News> newsLst = getAllNews();
+		map.addAttribute("news", newsLst);
+		map.addAttribute("isUpdate", isUpdated);
+		return INDEX_PAGE;
+	}
+
+	private List<News> getAllNews() {
+		return newsDAO.getAllNews();
+	}
 
 }
