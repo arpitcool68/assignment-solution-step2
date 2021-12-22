@@ -41,15 +41,15 @@ public class ApplicationContextConfig {
 	public DataSource getDataSource() {
 		DriverManagerDataSource dataSource = new DriverManagerDataSource();
 		dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
-		dataSource.setUrl(
-				"jdbc:mysql://localhost:3306/news?useSSL=false");
-//		dataSource.setUrl("jdbc:mysql://" + System.getenv("MYSQL_HOST") + ":3306/" +
-//		 System.getenv("MYSQL_DATABASE")
-//		 +"?verifyServerCertificate=false&useSSL=false&requireSSL=false");
-		dataSource.setUsername("root");
-		// dataSource.setUsername(System.getenv("MYSQL_USER"));
-		dataSource.setPassword("admin");
-		// dataSource.setPassword(System.getenv("MYSQL_PASSWORD"));
+//		dataSource.setUrl(
+//				"jdbc:mysql://localhost:3306/news?useSSL=false");
+		dataSource.setUrl("jdbc:mysql://" + System.getenv("MYSQL_HOST") + ":3306/" +
+		 System.getenv("MYSQL_DATABASE")
+		 +"?useSSL=false");
+		//dataSource.setUsername("root");
+		dataSource.setUsername(System.getenv("MYSQL_USER"));
+		//dataSource.setPassword("admin");
+		dataSource.setPassword(System.getenv("MYSQL_PASSWORD"));
 
 		return dataSource;
 	}
