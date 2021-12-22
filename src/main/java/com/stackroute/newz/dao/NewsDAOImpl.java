@@ -28,7 +28,6 @@ public class NewsDAOImpl implements NewsDAO {
 
 	public boolean addNews(News news) {
 		Session currentSession = getCurrentSession();
-		currentSession.beginTransaction();
 		news.setPublishedAt(LocalDateTime.now());
 		currentSession.save(news);
 		return true;
