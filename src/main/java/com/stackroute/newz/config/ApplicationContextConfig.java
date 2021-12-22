@@ -17,14 +17,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.stackroute.newz.model.News;
 
-/*This class will contain the application-context for the application. 
- * Define the following annotations:
- * @Configuration - Annotating a class with the @Configuration indicates that the 
- *                  class can be used by the Spring IoC container as a source of 
- *                  bean definitions
- * @EnableTransactionManagement - Enables Spring's annotation-driven transaction management capability.
- *                  
- * */
 
 @Configuration
 @EnableTransactionManagement
@@ -49,15 +41,15 @@ public class ApplicationContextConfig {
 	public DataSource getDataSource() {
 		DriverManagerDataSource dataSource = new DriverManagerDataSource();
 		dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
-		dataSource.setUrl(
-				"jdbc:mysql://localhost:3306/news?useSSL=false");
-		// dataSource.setUrl("jdbc:mysql://" + System.getenv("MYSQL_HOST") + ":3306/" +
-		// System.getenv("MYSQL_DATABASE")
-		// +"?verifyServerCertificate=false&useSSL=false&requireSSL=false");
-		dataSource.setUsername("root");
-		// dataSource.setUsername(System.getenv("MYSQL_USER"));
-		dataSource.setPassword("admin");
-		// dataSource.setPassword(System.getenv("MYSQL_PASSWORD"));
+		//dataSource.setUrl(
+		//		"jdbc:mysql://localhost:3306/news?useSSL=false");
+		dataSource.setUrl("jdbc:mysql://" + System.getenv("MYSQL_HOST") + ":3306/" +
+		 System.getenv("MYSQL_DATABASE")
+		 +"?verifyServerCertificate=false&useSSL=false&requireSSL=false");
+		//dataSource.setUsername("root");
+		 dataSource.setUsername(System.getenv("MYSQL_USER"));
+		//dataSource.setPassword("admin");
+		 dataSource.setPassword(System.getenv("MYSQL_PASSWORD"));
 
 		return dataSource;
 	}
